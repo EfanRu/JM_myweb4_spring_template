@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+//@Service
 public class UserServiceRest {
     private final RestTemplate restTemplate;
     private String serverUrl = "http://localhost:8080";

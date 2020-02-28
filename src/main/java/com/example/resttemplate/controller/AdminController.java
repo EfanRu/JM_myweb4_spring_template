@@ -12,14 +12,14 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class AdminController {
 
-    private UserServiceRest userService;
+//    private UserServiceRest userService;
     private String url = "http://localhost:8080/";
 
 
-    @Autowired
-    private void setUserService(UserServiceRest userService) {
-        this.userService = userService;
-    }
+//    @Autowired
+//    private void setUserService(UserServiceRest userService) {
+//        this.userService = userService;
+//    }
 
     @GetMapping("/admin")
     public ResponseEntity<String> authorization() {
