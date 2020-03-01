@@ -1,5 +1,7 @@
 package com.example.resttemplate.controller;
 
+import com.example.resttemplate.model.User;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 //import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,31 +26,39 @@ public class LoginController {
 
     @GetMapping({"/", "/login"})
     public ResponseEntity<String> login() {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        return response;
+        return new RestTemplate().getForEntity(url, String.class);
+    }
+
+    @GetMapping("/error")
+    public ResponseEntity<String> error() {
+        return new RestTemplate().getForEntity(url, String.class);
     }
 
 
-//    @GetMapping("/authorization")
-//    public ResponseEntity<String> authorization() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        return restTemplate.getForEntity(url, String.class);
-//    }
-
-
-    @GetMapping("/authorization")
+    @PostMapping("/authorization")
     public ResponseEntity<String> authorization(Model model) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("login", "admin");
-        map.add("password", "admin");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//
+//        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+//        map.add("login", "admin");
+//        map.add("password", "admin");
+//
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-        return restTemplate.postForEntity( url, request , String.class );
+        return restTemplate.postForEntity( url, new HttpEntity<String>(createHeaders("admin", "admin")) , String.class );
+    }
+
+    HttpHeaders createHeaders(String username, String password){
+        return new HttpHeaders() {{
+            String auth = username + ":" + password;
+            byte[] encodedAuth = Base64.encodeBase64(
+                    auth.getBytes(Charset.forName("US-ASCII")) );
+            String authHeader = "Basic " + new String( encodedAuth );
+            set( "Authorization", authHeader );
+        }};
     }
 }

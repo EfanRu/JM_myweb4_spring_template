@@ -1,5 +1,6 @@
 package com.example.resttemplate.controller;
 
+import com.example.resttemplate.model.User;
 import com.example.resttemplate.service.UserServiceRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,8 @@ public class AdminController {
 //    }
 
     @GetMapping("/admin")
-    public ResponseEntity<String> authorization() {
-        return new RestTemplate().getForEntity(url, String.class);
+    public ResponseEntity<User> authorization() {
+        return new RestTemplate().getForEntity(url, User.class);
     }
 
-
-    @GetMapping("/error")
-    public ResponseEntity<String> error() {
-        return new RestTemplate().getForEntity(url, String.class);
-    }
 }
